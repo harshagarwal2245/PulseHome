@@ -1,7 +1,6 @@
 # PulseHome
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 ![Build Status](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
-[![Tests](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg?event=push)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
 
 ---

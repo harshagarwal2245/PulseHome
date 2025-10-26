@@ -2,8 +2,8 @@
 
 [![Crates.io](https://img.shields.io/crates/v/pulsehome)](https://crates.io/crates/pulsehome)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Build Status](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml)
-[![Tests](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg?event=push)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml)
+[![Build Status](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
+[![Tests](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg?event=push)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
 
 ---
@@ -129,48 +129,96 @@ The system is fully tested for:
 
 ```mermaid
 classDiagram
-    class CLI {
-        +start()
-        +parse_command(command: &str)
-        +display_message(msg: &str)
-    }
+   class CLI {
+    +start()
+    +parse_command(command: &str)
+    +display_message(msg: &str)
+}
 
-    class HomeHub {
-        -devices: Vec<Box<dyn Device>>
-        -observers: Vec<Box<dyn Observer>>
-        +register_device(device: Box<dyn Device>)
-        +register_observer(observer: Box<dyn Observer>)
-        +execute_device_command(device_name: &str, command: EventType)
-    }
+class HomeHub {
+    -devices: Vec<Box<dyn Device>>
+    -observers: Vec<Box<dyn Observer>>
+    +add_device(device: Box<dyn Device>)
+    +register_observer(observer: Box<dyn Observer>)
+    +send_command(device_name: &str, command: Command)
+    +notify_observers(event: Event)
+}
 
-    class Device {
-        <<interface>>
-        +execute_command(command: EventType)
-        +get_name() : &str
-        +get_type() : &str
-        +get_state() : String
-    }
+interface Device {
+    +execute_command(command: Command) : Result<Event, String>
+    +get_name() : &str
+    +get_state() : String
+}
 
-    class Light
-    class Thermostat
-    class DoorLock
+class Light {
+    -state: bool
+    +execute_command(command: Command) : Result<Event, String>
+    +get_name() : &str
+    +get_state() : String
+}
 
-    class Observer {
-        <<interface>>
-        +on_event(event: &Event)
-    }
+class Thermostat {
+    -temperature: u32
+    +execute_command(command: Command) : Result<Event, String>
+    +get_name() : &str
+    +get_state() : String
+}
 
-    class DisplayObserver
-    class LoggerObserver
+class DoorLock {
+    -locked: bool
+    +execute_command(command: Command) : Result<Event, String>
+    +get_name() : &str
+    +get_state() : String
+}
 
-    CLI --> HomeHub
-    HomeHub --> Device
-    HomeHub --> Observer
-    Light --|> Device
-    Thermostat --|> Device
-    DoorLock --|> Device
-    DisplayObserver --|> Observer
-    LoggerObserver --|> Observer
+interface Observer {
+    +update(event: Event)
+}
+
+class DisplayObserver {
+    +update(event: Event)
+}
+
+class LoggerObserver {
+    -file_path: String
+    +update(event: Event)
+    +flush_logs()
+}
+
+class Event {
+    -device_name: String
+    -device_type: String
+    -event_type: EventType
+    -payload: Option<String>
+}
+
+enum EventType {
+    TurnOn
+    TurnOff
+    SetTemp
+    Lock
+    Unlock
+}
+
+enum Command {
+    On
+    Off
+    SetTemp(u32)
+    Lock
+    Unlock
+}
+
+'========== Relationships =========='
+CLI --> HomeHub : sends commands
+HomeHub --> Device : manages
+HomeHub --> Observer : notifies
+Light ..|> Device
+Thermostat ..|> Device
+DoorLock ..|> Device
+DisplayObserver ..|> Observer
+LoggerObserver ..|> Observer
+EventType <|-- Event
+Command <|-- Device : executed by
 ```
 
 ---

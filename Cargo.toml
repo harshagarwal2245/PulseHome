@@ -1,6 +1,26 @@
 [package]
-name = "PulseHome"
+name = "pulsehome"
 version = "0.1.0"
-edition = "2024"
+description = "PulseHome is a modular Rust-based smart home controller showcasing Observer and Mediator design patterns using TDD."
+authors = ["HarshAgarwal <agarwal.harsh244@gmail.com>"]
+license = "MIT"
+edition  = "2024"
+repository = "https://github.com/harshagarwal2245/PulseHome.git"
 
 [dependencies]
+chrono = "0.4.42"
+thiserror = "1.0"
+
+[profile.dev]
+opt-level = 0              
+debug = true               
+overflow-checks = true    
+lto = false               
+incremental = true       
+
+[profile.release]
+opt-level = 3           
+debug = false             
+lto = true                
+codegen-units = 1         
+panic = "abort"

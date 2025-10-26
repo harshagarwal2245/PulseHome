@@ -1,8 +1,6 @@
 # PulseHome
-
-[![Crates.io](https://img.shields.io/crates/v/pulsehome)](https://crates.io/crates/pulsehome)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Build Status](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
+![Build Status](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
 [![Tests](https://github.com/harshagarwal2245/PulseHome/actions/workflows/rust.yml/badge.svg?event=push)](https://github.com/harshagarwal2245/PulseHome/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)]()
 

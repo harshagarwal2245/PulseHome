@@ -129,96 +129,101 @@ The system is fully tested for:
 
 ```mermaid
 classDiagram
-   class CLI {
-    +start()
-    +parse_command(command: &str)
-    +display_message(msg: &str)
-}
+    class CLI {
+        +start()
+        +parse_command(command: &str)
+        +display_message(msg: &str)
+    }
 
-class HomeHub {
-    -devices: Vec<Box<dyn Device>>
-    -observers: Vec<Box<dyn Observer>>
-    +add_device(device: Box<dyn Device>)
-    +register_observer(observer: Box<dyn Observer>)
-    +send_command(device_name: &str, command: Command)
-    +notify_observers(event: Event)
-}
+    class HomeHub {
+        -devices: Vec<Box<dyn Device>>
+        -observers: Vec<Box<dyn Observer>>
+        +add_device(device: Box<dyn Device>)
+        +register_observer(observer: Box<dyn Observer>)
+        +send_command(device_name: &str, command: Command)
+        +notify_observers(event: Event)
+    }
 
-interface Device {
-    +execute_command(command: Command) : Result<Event, String>
-    +get_name() : &str
-    +get_state() : String
-}
+    class Device {
+        <<interface>>
+        +execute_command(command: Command) : Result<Event, String>
+        +get_name() : &str
+        +get_state() : String
+    }
 
-class Light {
-    -state: bool
-    +execute_command(command: Command) : Result<Event, String>
-    +get_name() : &str
-    +get_state() : String
-}
+    class Light {
+        -state: bool
+        +execute_command(command: Command) : Result<Event, String>
+        +get_name() : &str
+        +get_state() : String
+    }
 
-class Thermostat {
-    -temperature: u32
-    +execute_command(command: Command) : Result<Event, String>
-    +get_name() : &str
-    +get_state() : String
-}
+    class Thermostat {
+        -temperature: u32
+        +execute_command(command: Command) : Result<Event, String>
+        +get_name() : &str
+        +get_state() : String
+    }
 
-class DoorLock {
-    -locked: bool
-    +execute_command(command: Command) : Result<Event, String>
-    +get_name() : &str
-    +get_state() : String
-}
+    class DoorLock {
+        -locked: bool
+        +execute_command(command: Command) : Result<Event, String>
+        +get_name() : &str
+        +get_state() : String
+    }
 
-interface Observer {
-    +update(event: Event)
-}
+    class Observer {
+        <<interface>>
+        +update(event: Event)
+    }
 
-class DisplayObserver {
-    +update(event: Event)
-}
+    class DisplayObserver {
+        +update(event: Event)
+    }
 
-class LoggerObserver {
-    -file_path: String
-    +update(event: Event)
-    +flush_logs()
-}
+    class LoggerObserver {
+        -file_path: String
+        +update(event: Event)
+        +flush_logs()
+    }
 
-class Event {
-    -device_name: String
-    -device_type: String
-    -event_type: EventType
-    -payload: Option<String>
-}
+    class Event {
+        -device_name: String
+        -device_type: String
+        -event_type: EventType
+        -payload: Option<String>
+    }
 
-enum EventType {
-    TurnOn
-    TurnOff
-    SetTemp
-    Lock
-    Unlock
-}
+    class EventType {
+        <<enumeration>>
+        TurnOn
+        TurnOff
+        SetTemp
+        Lock
+        Unlock
+    }
 
-enum Command {
-    On
-    Off
-    SetTemp(u32)
-    Lock
-    Unlock
-}
+    class Command {
+        <<enumeration>>
+        On
+        Off
+        SetTemp(u32)
+        Lock
+        Unlock
+    }
 
-'========== Relationships =========='
-CLI --> HomeHub : sends commands
-HomeHub --> Device : manages
-HomeHub --> Observer : notifies
-Light ..|> Device
-Thermostat ..|> Device
-DoorLock ..|> Device
-DisplayObserver ..|> Observer
-LoggerObserver ..|> Observer
-EventType <|-- Event
-Command <|-- Device : executed by
+    %% Relationships
+    CLI --> HomeHub : sends commands
+    HomeHub --> Device : manages
+    HomeHub --> Observer : notifies
+    Light ..|> Device
+    Thermostat ..|> Device
+    DoorLock ..|> Device
+    DisplayObserver ..|> Observer
+    LoggerObserver ..|> Observer
+    EventType <|-- Event
+    Command <|-- Device : executed by
+
 ```
 
 ---

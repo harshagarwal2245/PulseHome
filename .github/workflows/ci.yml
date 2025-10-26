@@ -43,7 +43,7 @@ jobs:
           tag_name: ${{ github.ref_name }}   # You can update manually or generate dynamically
           release_name: Release ${{ github.ref_name }}
           body: |
-            Automated release of Shape Calculator
+            Automated release of PulseHome
             - Dev/Release binaries built
             - Tested & ready for use
 
@@ -55,6 +55,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/release/dataproc
-          asset_name: shape-reporter
+          asset_path: ./target/release/pulsehome
+          asset_name: PulseHome
           asset_content_type: application/octet-stream
